@@ -2,6 +2,7 @@ package com.ejthomas.backend;
 
 import java.util.Scanner;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Calculator {
@@ -43,17 +44,32 @@ public class Calculator {
         Expression nested = new Subtraction(add, divide);
         System.out.println("Result: " + nested.evaluate().getValue());
 
+        // Sequence of characters
+        // LinkedList<String> ll = new LinkedList<>();
+        // Scanner scanner = new Scanner(System.in);
+        // String userInput = scanner.nextLine();
+        // ll.add(userInput);
+        // while (userInput.length() == 1) {
+        //     userInput = scanner.nextLine();
+        //     ll.add(userInput);
+        // }
+        // scanner.close();
+        // System.out.println("User input: " + ll);
+
         // Sequence of symbols
-        LinkedList<String> ll = new LinkedList<>();
-        Scanner scanner = new Scanner(System.in);
-        String userInput = scanner.nextLine();
-        ll.add(userInput);
-        while (userInput.length() == 1) {
-            userInput = scanner.nextLine();
-            ll.add(userInput);
+        LinkedList<Symbol> ll = new LinkedList<>();
+        ll.add(new Symbol("1"));
+        ll.add(new Symbol("+"));
+        ll.add(new Symbol("1"));
+
+        // Rule 1
+        HashSet<String> digits = new HashSet<>();
+        for (int i = 0; i < 10; i++) {
+            digits.add(String.valueOf(i));
         }
-        scanner.close();
-        System.out.println("User input: " + ll);
+        System.out.println(digits);
+
+        
     }
 
     // public LiteralExpression parseString(String s) {

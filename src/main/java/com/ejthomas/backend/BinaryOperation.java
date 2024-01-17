@@ -6,7 +6,7 @@ public abstract class BinaryOperation extends Operation {
     protected Expression rightOperand;
 
     public BinaryOperation(Expression leftOperand, Expression rightOperand) {
-        super(2);
+        // super(2);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
     }
