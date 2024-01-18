@@ -35,35 +35,38 @@ public class Parser {
             switch (c) {
                 case '+':
                     result = add(num1);
-                    evaluated = true;
+                    // evaluated = true;
                     break;
                 case '-':
                     result = sub(num1);
-                    evaluated = true;
+                    // evaluated = true;
                     break;
                 default:
                     error("[+-]");
                     break;
             }
-            return;
+            // return;
         } else if (isMulOp(c)) {
             switch (c) {
                 case '*':
                     result = mul(num1);
-                    evaluated = true;
+                    // evaluated = true;
                     break;
                 case '/':
                     result = div(num1);
-                    evaluated = true;
+                    // evaluated = true;
                     break;
                 default:
                     error("[*/]");
                     break;
             }
-            return;
+            // return;
         } else {
             error("[+-*/]");
             return;
+        }
+        if (pos == input.length()) {
+            evaluated = true;
         }
     }
 

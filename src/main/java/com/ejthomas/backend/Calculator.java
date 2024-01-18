@@ -1,17 +1,13 @@
 package com.ejthomas.backend;
 
-import java.util.Scanner;
 import java.util.HashSet;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
-// import java.util.regex.Pattern;
-// import java.util.regex.Matcher;
 
 public class Calculator {
     public static void main(String[] args) {
         // Receive input from frontend -- provided as String
-        String input = "20+3";
+        String input = "1++2";
 
         Parser parser = new Parser(input);
 
