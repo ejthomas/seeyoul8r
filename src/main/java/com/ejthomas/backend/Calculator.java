@@ -11,44 +11,15 @@ import java.util.LinkedList;
 public class Calculator {
     public static void main(String[] args) {
         // Receive input from frontend -- provided as String
-        String input = "1+2*3-4/5";
+        String input = "20+3";
 
-        LinkedList<String> sequence = toSequence(input);
-        System.out.println(sequence);
+        Parser parser = new Parser(input);
 
-        String input2 = "11+12*3-40/5";
+        parser.evaluate();
 
-        LinkedList<String> sequence2 = toSequence(input2);
-        System.out.println(sequence2);
-
-        String input3 = "1+sqrtq20*3-4/5";
-
-        LinkedList<String> sequence3 = toSequence(input3);
-        System.out.println(sequence3);
-
-        LinkedList<Token> input4 = new LinkedList<>(){{
-            add(new Token("1", false));
-            add(new Token("+", true));
-            add(new Token("sqrt", true));
-            add(new Token("2", false));
-            add(new Token("0", false));
-            add(new Token("*", true));
-            add(new Token("3", false));
-            add(new Token("-", true));
-            add(new Token("4", false));
-            add(new Token("/", true));
-            add(new Token("5", false));
-        }};
-        LinkedList<Token> sequence4 = combineDigits(input4);
-        // Print
-        System.out.print("[");
-        for (int i = 0; i < sequence4.size(); i++) {
-            System.out.print(sequence4.get(i).getValue());
-            if (i != sequence4.size() - 1) {
-                System.out.print(", ");
-            }
+        if (parser.isEvaluated()) {
+            System.out.print(input + "=" + parser.getResult() + "\n");
         }
-        System.out.print("]\n");
     }
 
     public static LinkedList<String> toSequence(String s) {
@@ -84,28 +55,6 @@ public class Calculator {
                 if (subs.length() > 0) {
                     System.out.println("Error: could not parse operator: " + subs);
                 }
-            }
-        }
-        return sequence;
-    }
-
-    public static LinkedList<Token> combineDigits(LinkedList<Token> ll) {
-        LinkedList<Token> sequence = new LinkedList<>();
-        int i = 0;
-        while (i < ll.size()) {
-            if (!(ll.get(i).isOperator)) {
-                // Handle groups of digits
-                int start = i;
-                while (++i < ll.size() && !ll.get(i).isOperator) {}
-                LinkedList<String> contents = new LinkedList<>();
-                for (Token t: ll.subList(start, i)) {
-                    contents.add(t.getValue());
-                }
-                String value = String.join("", contents);
-                Token t = new Token(value, false);
-                sequence.add(t);
-            } else {
-                sequence.add(ll.get(i++));
             }
         }
         return sequence;
