@@ -13,10 +13,15 @@ public class ParserTest {
 
     @Test
     public void isEvaluated() {
+        // Defaults to false
         Parser parser = new Parser("1+2");
         Assertions.assertEquals(false, parser.isEvaluated());
+
+        // True after evaluating valid expression
         parser.evaluate();
         Assertions.assertEquals(true, parser.isEvaluated());
+
+        // False after evaluating invalid expression
         parser = new Parser("1++2");
         parser.evaluate();
         Assertions.assertEquals(false, parser.isEvaluated());
@@ -65,45 +70,29 @@ public class ParserTest {
         Assertions.assertEquals(true, parser.isEvaluated());
         Assertions.assertEquals(24, parser.getResult());
 
-    }
+        // Rejects letter at start
+        parser = new Parser("A2/2");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
 
-    @Test
-    public void nextChar() {
-    }
+        // Rejects letter at end
+        parser = new Parser("1+1h");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
 
-    @Test
-    public void isDigit() {
-    }
+        // Rejects letter as first operand
+        parser = new Parser("a*5");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
 
-    @Test
-    public void isAddOp() {
-    }
+        // Rejects letter as second operand
+        parser = new Parser("1-c");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
 
-    @Test
-    public void isMulOp() {
-    }
-
-    @Test
-    public void getNumber() {
-    }
-
-    @Test
-    public void add() {
-    }
-
-    @Test
-    public void sub() {
-    }
-
-    @Test
-    public void mul() {
-    }
-
-    @Test
-    public void div() {
-    }
-
-    @Test
-    public void error() {
+        // Rejects unsupported operator
+        parser = new Parser("2^5");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
     }
 }

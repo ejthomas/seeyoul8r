@@ -42,7 +42,6 @@ public class Parser {
                     // evaluated = true;
                     break;
                 default:
-                    error("[+-]");
                     break;
             }
             // return;
@@ -57,7 +56,6 @@ public class Parser {
                     // evaluated = true;
                     break;
                 default:
-                    error("[*/]");
                     break;
             }
             // return;
