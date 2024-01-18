@@ -24,44 +24,35 @@ public class Parser {
         char c = input.charAt(pos);
         int num1 = 0;
         if (isDigit(c)) {
-            // Handle digit
             num1 = getNumber();
         } else {
             error("[0-9]");
             return;
         }
-        c = input.charAt(pos);
-        if (isAddOp(c)) {
-            switch (c) {
-                case '+':
-                    result = add(num1);
-                    // evaluated = true;
-                    break;
-                case '-':
-                    result = sub(num1);
-                    // evaluated = true;
-                    break;
-                default:
-                    break;
-            }
-            // return;
-        } else if (isMulOp(c)) {
-            switch (c) {
-                case '*':
-                    result = mul(num1);
-                    // evaluated = true;
-                    break;
-                case '/':
-                    result = div(num1);
-                    // evaluated = true;
-                    break;
-                default:
-                    break;
-            }
-            // return;
-        } else {
-            error("[+-*/]");
+        if (pos == input.length()) {
+            result = num1;
+            evaluated = true;
             return;
+        }
+        c = input.charAt(pos);
+        switch (c) {
+            // AddOps
+            case '+':
+                result = add(num1);
+                break;
+            case '-':
+                result = sub(num1);
+                break;
+            // MulOps
+            case '*':
+                result = mul(num1);
+                break;
+            case '/':
+                result = div(num1);
+                break;
+            default:
+                error("[+-*/]");
+                break;
         }
         if (pos == input.length()) {
             evaluated = true;
