@@ -2,82 +2,112 @@ package com.ejthomas.backend;
 
 import java.util.Scanner;
 import java.util.HashSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+// import java.util.regex.Pattern;
+// import java.util.regex.Matcher;
 
 public class Calculator {
     public static void main(String[] args) {
-        // System.out.println("Hello, World!");
-        // Scanner scanner = new Scanner(System.in);
-        // String userInput = scanner.nextLine();
-        // System.out.println("User input: " + userInput);
-        // scanner.close();
+        // Receive input from frontend -- provided as String
+        String input = "1+2*3-4/5";
 
-        Literal i1 = new Literal(2);
-        Literal i2 = new Literal(15);
+        LinkedList<String> sequence = toSequence(input);
+        System.out.println(sequence);
 
-        Expression addition = new Addition(i1, i2);
-        Literal i3 = addition.evaluate();
-        System.out.println("Result: " + i3.getValue());
+        String input2 = "11+12*3-40/5";
 
-        Expression multiplication = new Multiplication(i1, i2);
-        Literal i4 = multiplication.evaluate();
-        System.out.println("Result: " + i4.getValue());
+        LinkedList<String> sequence2 = toSequence(input2);
+        System.out.println(sequence2);
 
-        Expression subtraction = new Subtraction(i2, i1);
-        Literal i5 = subtraction.evaluate();
-        System.out.println("Result: " + i5.getValue());
+        String input3 = "1+sqrtq20*3-4/5";
 
-        Expression division = new Division(i2, i1);
-        Literal i6 = division.evaluate();
-        System.out.println("Result: " + i6.getValue());
+        LinkedList<String> sequence3 = toSequence(input3);
+        System.out.println(sequence3);
 
-        // Nested expression tests
-        Literal one = new Literal(1);
-        Literal two = new Literal(2);
-        Literal three = new Literal(3);
-        Literal forty = new Literal(40);
-        Literal five = new Literal(5);
-        Expression mult = new Multiplication(two, three);
-        Expression divide = new Division(forty, five);
-        Expression add = new Addition(one, mult);
-        Expression nested = new Subtraction(add, divide);
-        System.out.println("Result: " + nested.evaluate().getValue());
-
-        // Sequence of characters
-        // LinkedList<String> ll = new LinkedList<>();
-        // Scanner scanner = new Scanner(System.in);
-        // String userInput = scanner.nextLine();
-        // ll.add(userInput);
-        // while (userInput.length() == 1) {
-        //     userInput = scanner.nextLine();
-        //     ll.add(userInput);
-        // }
-        // scanner.close();
-        // System.out.println("User input: " + ll);
-
-        // Sequence of symbols
-        LinkedList<Symbol> ll = new LinkedList<>();
-        ll.add(new Symbol("1"));
-        ll.add(new Symbol("+"));
-        ll.add(new Symbol("1"));
-
-        // Rule 1
-        HashSet<String> digits = new HashSet<>();
-        for (int i = 0; i < 10; i++) {
-            digits.add(String.valueOf(i));
+        LinkedList<Token> input4 = new LinkedList<>(){{
+            add(new Token("1", false));
+            add(new Token("+", true));
+            add(new Token("sqrt", true));
+            add(new Token("2", false));
+            add(new Token("0", false));
+            add(new Token("*", true));
+            add(new Token("3", false));
+            add(new Token("-", true));
+            add(new Token("4", false));
+            add(new Token("/", true));
+            add(new Token("5", false));
+        }};
+        LinkedList<Token> sequence4 = combineDigits(input4);
+        // Print
+        System.out.print("[");
+        for (int i = 0; i < sequence4.size(); i++) {
+            System.out.print(sequence4.get(i).getValue());
+            if (i != sequence4.size() - 1) {
+                System.out.print(", ");
+            }
         }
-        System.out.println(digits);
-
-        
+        System.out.print("]\n");
     }
 
-    // public LiteralExpression parseString(String s) {
-        // TODO: parentheses
-        // HashSet<String> operators = new HashSet<>();
-        // operators.add("+");
-        // operators.add("-");
-        // operators.add("*");
-        // operators.add("/");
-    // }
+    public static LinkedList<String> toSequence(String s) {
+        LinkedList<String> sequence = new LinkedList<>();
+        HashSet<String> operators = new HashSet<String>();
+        Collections.addAll(operators, "+", "-", "*", "/", "sqrt");
+        int i = 0;
+        while (i < s.length()) {
+            if (Character.isDigit(s.charAt(i))) {
+                // Handle groups of digits
+                int start = i;
+                while (++i < s.length() && Character.isDigit(s.charAt(i))) {}
+                sequence.add(s.substring(start, i));
+            } else {
+                // Handle operators
+                int start = i;
+                while (++i < s.length() && !Character.isDigit(s.charAt(i))) {}
+                String subs = s.substring(start, i);
+                int j = 0;
+                while (++j <= subs.length()) {
+                    if (operators.contains(subs)) {
+                        sequence.add(subs);
+                        subs = "";
+                    } else {
+                        if (operators.contains(subs.substring(0, j))) {
+                            sequence.add(subs.substring(0, j));
+                            subs = subs.substring(j); // subs.substring(j).length() == 0 if j == subs.length()
+                            j = 0;
+                        }
+                    }
+                }
+                // Check all operators parsed
+                if (subs.length() > 0) {
+                    System.out.println("Error: could not parse operator: " + subs);
+                }
+            }
+        }
+        return sequence;
+    }
+
+    public static LinkedList<Token> combineDigits(LinkedList<Token> ll) {
+        LinkedList<Token> sequence = new LinkedList<>();
+        int i = 0;
+        while (i < ll.size()) {
+            if (!(ll.get(i).isOperator)) {
+                // Handle groups of digits
+                int start = i;
+                while (++i < ll.size() && !ll.get(i).isOperator) {}
+                LinkedList<String> contents = new LinkedList<>();
+                for (Token t: ll.subList(start, i)) {
+                    contents.add(t.getValue());
+                }
+                String value = String.join("", contents);
+                Token t = new Token(value, false);
+                sequence.add(t);
+            } else {
+                sequence.add(ll.get(i++));
+            }
+        }
+        return sequence;
+    }
 }
