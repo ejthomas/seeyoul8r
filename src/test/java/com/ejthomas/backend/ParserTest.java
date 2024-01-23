@@ -22,7 +22,7 @@ public class ParserTest {
         Assertions.assertEquals(true, parser.isEvaluated());
 
         // False after evaluating invalid expression
-        parser = new Parser("1++2");
+        parser = new Parser("1+*2");
         parser.evaluate();
         Assertions.assertEquals(false, parser.isEvaluated());
     }
@@ -33,7 +33,7 @@ public class ParserTest {
         Assertions.assertEquals(0, parser.getResult());
         parser.evaluate();
         Assertions.assertEquals(3, parser.getResult());
-        parser = new Parser("1++2");
+        parser = new Parser("1+*2");
         parser.evaluate();
         Assertions.assertEquals(0, parser.getResult());
     }
@@ -102,4 +102,23 @@ public class ParserTest {
         parser.evaluate();
         Assertions.assertEquals(false, parser.isEvaluated());
     }
+
+    @Test
+    public void givenUnaryPlusMinus_whenEvaluate_thenGivesCorrectAnswer() {
+        Parser parser = new Parser("-1+23");
+        parser.evaluate();
+        Assertions.assertTrue(parser.isEvaluated());
+        Assertions.assertEquals(22, parser.getResult());
+
+        parser = new Parser("1+-23");
+        parser.evaluate();
+        Assertions.assertTrue(parser.isEvaluated());
+        Assertions.assertEquals(-22, parser.getResult());
+
+        parser = new Parser("+1++23");
+        parser.evaluate();
+        Assertions.assertTrue(parser.isEvaluated());
+        Assertions.assertEquals(24, parser.getResult());
+    }
+
 }
