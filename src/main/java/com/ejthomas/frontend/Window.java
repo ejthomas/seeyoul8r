@@ -49,7 +49,7 @@ public class Window extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
-        this.setSize(400, 400);
+        this.setSize(500, 400);
         this.setResizable(false);
     }
 
