@@ -15,14 +15,15 @@ import java.awt.event.*;
 public class Window extends JFrame {
     protected JTextField inputField;
     protected JLabel answerLabel;
+    private String lastAnswer = "";
 
     public static void main(String[] args) {
         Window window = new Window("SeeYouL8r Calculator");
-        // System.out.println(window.toString());
-        // System.out.println(window.getTitle());
+        window.setVisible(true);
     }
 
     public Window(String name) {
+        // Window will not be visible until this.setVisible(true) called
         super(name);
 
         // Display panel
@@ -49,9 +50,7 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setSize(400, 400);
-        // this.setLayout(new BorderLayout());
         this.setResizable(false);
-        this.setVisible(true);
     }
 
     public String getInput() {
@@ -98,6 +97,15 @@ public class Window extends JFrame {
         }
         // zero goes last to match typical numpad
         numberPanel.add(new InputButton("0", this));
+
+        // Previous answer button
+        JButton lastAnswerButton = new JButton("ANS");
+        lastAnswerButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                lastAnswerAction();
+            }
+        });
+        numberPanel.add(lastAnswerButton);
         return numberPanel;
     }
 
@@ -174,10 +182,16 @@ public class Window extends JFrame {
         Parser parser = new Parser(getInput());
         parser.evaluate();
         if (parser.isEvaluated()) {
-            setAnswer(String.valueOf(parser.getResult()));
+            String answer = String.valueOf(parser.getResult());
+            setAnswer(answer);
+            lastAnswer = answer;
         } else {
             setAnswer("Syntax Error");
         }
+    }
+
+    public void lastAnswerAction() {
+        setInput(getInput() + lastAnswer);
     }
 
     // TODO:extension beyond single operation

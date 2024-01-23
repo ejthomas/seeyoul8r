@@ -51,4 +51,25 @@ public class WindowTest {
         Assertions.assertEquals("", window.getInput());
         Assertions.assertEquals("", window.getAnswer());
     }
+
+    @Test
+    public void whenLastAnswerAction_thenAppendsLastAnswer() {
+        Window window = new Window("Window");
+
+        // Empty if no previous answer
+        window.lastAnswerAction();
+        Assertions.assertEquals("", window.getInput());
+
+        // Not updated by Window.setAnswer()
+        window.setAnswer("17");
+        window.lastAnswerAction();
+        Assertions.assertEquals("", window.getInput());
+
+        // Updated on evaluation of valid expression
+        window.setInput("1000-80");
+        window.equalsAction();
+        window.clearAction();
+        window.lastAnswerAction();
+        Assertions.assertEquals("920", window.getInput());
+    }
 }
