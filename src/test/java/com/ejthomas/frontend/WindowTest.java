@@ -36,8 +36,15 @@ public class WindowTest {
     @Test
     public void equalsAction() {
         Window window = new Window("Window");
+
+        // Syntax error if empty
         window.equalsAction();
         Assertions.assertEquals("Syntax Error", window.getAnswer());
+
+        // Sets answer correctly when input field valid
+        window.setInput("15*2");
+        window.equalsAction();
+        Assertions.assertEquals("30", window.getAnswer());
     }
 
     @Test
