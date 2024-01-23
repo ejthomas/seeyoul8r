@@ -21,9 +21,10 @@ To run the generated `.jar` file, use
 ```
 java -jar target/seeyoul8r-<version>.jar
 ```
-The on-screen buttons should be used to input the desired calculation. The input is evaluated when the "=" button is clicked. The "CLEAR" button clears the input and output ready for the next calculation.
+The on-screen buttons should be used to input the desired calculation. The input is evaluated when the "=" button is clicked. The "CLEAR" button clears the input and output ready for the next calculation. The "ANS" button copies the last evaluated answer to the input field.
 
-Currently, the calculator only supports inputs with one mathematical operation, and is limited to integer (whole-number) calculations.
+Currently, the calculator observes order of operations for addition, subtraction, multiplication and division, but does not include support for brackets or exponentiation, and is limited to integer (whole-number) calculations.
+
 
 # Contribute
 
@@ -33,4 +34,6 @@ See [guide for contributors](CONTRIBUTING).
 
 Made available under MIT License (see [LICENSE](LICENSE)).
 
+# Acknowledgments
 
+The approach used to parse the input and evaluate expressions with multiple binary operators while observing order of operations is based on the discussion in chapters 1-3 of [Let's Build a Compiler, by Jack Crenshaw](https://compilers.iecc.com/crenshaw/).
