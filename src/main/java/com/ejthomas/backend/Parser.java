@@ -6,6 +6,8 @@ public class Parser {
     private boolean evaluated = false;
     private int pos = 0;
     private int result;
+    private boolean errorRaised = false;
+    private String lastError;
 
     public Parser(String s) {
         input = s;
@@ -19,12 +21,17 @@ public class Parser {
         return result;
     }
 
+    public String getLastError() {
+        return lastError;
+    }
+
     public void evaluate() {
         /*  When calling subroutines from this method, the current
             position should be set on the first character needed
             by the subroutine (i.e. subroutines should not have 
             to start by advancing to the next character)
         */
+        errorRaised = false;  // overwrite any previous value
         pos = 0;
         if (pos == input.length()) {
             error("non-empty");
@@ -125,6 +132,10 @@ public class Parser {
     }
 
     private void error(String expected) {
-        System.out.println("Error: expected " + expected);
+        if (!errorRaised) {
+            lastError = "Expected " + expected;
+            System.out.println("Error: " + lastError);
+        }
+        errorRaised = true;
     }
 }
