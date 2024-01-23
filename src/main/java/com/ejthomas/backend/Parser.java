@@ -20,20 +20,20 @@ public class Parser {
     }
 
     public void evaluate() {
+        /*  When calling subroutines from this method, the current
+            position should be set on the first character needed
+            by the subroutine (i.e. subroutines should not have 
+            to start by advancing to the next character)
+        */
         pos = 0;
         if (pos == input.length()) {
-            return;
+            error("non-empty");
+            return;  // exit with error if input is empty
         }
         char c = input.charAt(pos);
-        int num1 = 0;
-        if (isDigit(c)) {
-            num1 = getNumber();
-        } else {
-            error("[0-9]");
-            return;
-        }
+        int workingResult = getNumber();
         if (pos == input.length()) {
-            result = num1;
+            result = workingResult;
             evaluated = true;
             return;
         }
@@ -41,24 +41,29 @@ public class Parser {
         switch (c) {
             // AddOps
             case '+':
-                result = add(num1);
+                c = nextChar();
+                workingResult = add(workingResult);
                 break;
             case '-':
-                result = sub(num1);
+                c = nextChar();
+                workingResult = sub(workingResult);
                 break;
             // MulOps
             case '*':
-                result = mul(num1);
+                c = nextChar();
+                workingResult = mul(workingResult);
                 break;
             case '/':
-                result = div(num1);
+                c = nextChar();
+                workingResult = div(workingResult);
                 break;
             default:
                 error("[+-*/]");
-                break;
+                return;
         }
         if (pos == input.length()) {
             evaluated = true;
+            result = workingResult;
         }
     }
 
@@ -83,57 +88,40 @@ public class Parser {
     }
 
     private int getNumber() {
-        int initPos = pos;
-        while (isDigit(nextChar())) {}
-        return Integer.parseInt(input.substring(initPos, pos));
+        char c = input.charAt(pos);
+        // Handle sign if present
+        if (c == '+') {
+            // Skip with no action
+            c = nextChar();
+        } else if (c == '-') {
+            c = nextChar();
+            return sub(0); // return 0 - <numerical part>
+        }
+        // Get numerical part
+        if (isDigit(c)) {
+            int initPos = pos;
+            while (isDigit(nextChar())) {}
+            return Integer.parseInt(input.substring(initPos, pos));
+        } else {
+            error("[0-9]");
+            return 0;
+        }
     }
 
     private int add(int num1) {
-        char c = nextChar();
-        int num2;
-        if (isDigit(c)) {
-            num2 = getNumber();
-        } else {
-            error("[0-9]");
-            return 0;
-        }
-        return num1 + num2;
+        return num1 + getNumber();
     }
 
     private int sub(int num1) {
-        char c = nextChar();
-        int num2;
-        if (isDigit(c)) {
-            num2 = getNumber();
-        } else {
-            error("[0-9]");
-            return 0;
-        }
-        return num1 - num2;
+        return num1 - getNumber();
     }
 
     private int mul(int num1) {
-        char c = nextChar();
-        int num2;
-        if (isDigit(c)) {
-            num2 = getNumber();
-        } else {
-            error("[0-9]");
-            return 0;
-        }
-        return num1 * num2;
+        return num1 * getNumber();
     }
 
     private int div(int num1) {
-        char c = nextChar();
-        int num2;
-        if (isDigit(c)) {
-            num2 = getNumber();
-        } else {
-            error("[0-9]");
-            return 0;
-        }
-        return num1 / num2;
+        return num1 / getNumber();
     }
 
     private void error(String expected) {
