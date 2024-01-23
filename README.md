@@ -2,17 +2,28 @@
 
 # SeeYouL8r Calculator
 
-A simple calculator app with basic and scientific modes.
+A simple calculator app with a graphical user interface.
 
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
 
 # Installation
 
-Under construction.
+After cloning the repository, run
+```
+cd seeyoul8r
+mvn package -f pom.xml
+```
+to build with Maven.
 
 # Usage
 
-Under construction.
+To run the generated `.jar` file, use
+```
+java -jar target/seeyoul8r-<version>.jar
+```
+The on-screen buttons should be used to input the desired calculation. The input is evaluated when the "=" button is clicked. The "CLEAR" button clears the input and output ready for the next calculation.
+
+Currently, the calculator only supports inputs with one mathematical operation.
 
 # Contribute
 

@@ -6,7 +6,7 @@
 
     <groupId>com.ejthomas</groupId>
     <artifactId>seeyoul8r</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
     <properties>
@@ -43,6 +43,23 @@
 		<outputDirectory>target/classes</outputDirectory>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<packageName>com.ejthomas.seeyoul8r</packageName>
+						</manifest>
+						<manifestEntries>
+							<Created-By>ejthomas</Created-By>
+							<Main-class>com.ejthomas.frontend.Window</Main-class>
+							<Class-path>classes/</Class-path>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
