@@ -95,4 +95,11 @@ public class ParserTest {
         parser.evaluate();
         Assertions.assertEquals(false, parser.isEvaluated());
     }
+
+    @Test
+    public void givenEmptyString_whenEvaluate_thenExitsGracefully() {
+        Parser parser = new Parser("");
+        parser.evaluate();
+        Assertions.assertEquals(false, parser.isEvaluated());
+    }
 }

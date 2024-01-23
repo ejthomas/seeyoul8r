@@ -21,6 +21,9 @@ public class Parser {
 
     public void evaluate() {
         pos = 0;
+        if (pos == input.length()) {
+            return;
+        }
         char c = input.charAt(pos);
         int num1 = 0;
         if (isDigit(c)) {
