@@ -2,7 +2,7 @@
 
 # SeeYouL8r Calculator
 
-A simple calculator app with a graphical user interface.
+A simple calculator app with a graphical user interface, currently for integer arithmetic only.
 
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
 
@@ -23,7 +23,7 @@ java -jar target/seeyoul8r-<version>.jar
 ```
 The on-screen buttons should be used to input the desired calculation. The input is evaluated when the "=" button is clicked. The "CLEAR" button clears the input and output ready for the next calculation.
 
-Currently, the calculator only supports inputs with one mathematical operation.
+Currently, the calculator only supports inputs with one mathematical operation, and is limited to integer (whole-number) calculations.
 
 # Contribute
 
