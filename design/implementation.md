@@ -1,32 +1,39 @@
 # Implementation design
 
-Example input: 1 + 2 * 3 - 4 / 5
+Example inputs: 
+- 1 + 2
+- 3 * 4
+- 10 / 5
 
-# Key class: `Expression`
+# Frontend
 
-Representing mathematical expression understandable by the calculator, which can be evaluated to give a literal value.
+A Swing GUI allowing the user to type an expression using a displayed set of graphical buttons. Displays the output after evaluation of the input.
 
-Has an `evaluate()` abstract method, returning a `Literal`, which is overridden in each subclass to apply the desired operation. 
+# Backend
 
-# `Literal` (extends `Expression`)
+Operates a string parser to evaluate expressions. Assumes only single-character operators for now. Numbers can have more than one digit, but currently using integer arithmetic only.
 
-Represents a numerical value (may be integer or floating point). Evaulation of a `Literal` returns itself.
+## Parser
 
-# `Operation` (abstract, extends `Expression`)
+Attributes:
+- `private int pos`: index of current position
+- `private String input`: string representing input expression
+- `private boolean evaluated`: boolean flag set to true if evaluation completed successfully
+- `private int result`: integer representing calculation result
+Contains methods to parse an input string one character at a time.
+- `public boolean isEvaluated()`: getter for private member `evaluated`
+- `public int getResult()`: getter for private member `result`
+- `public void evaluate()`: top-level method to compute result of input expression
+- `private char nextChar()`: advances `pos` by 1 and returns next character of input
+- `private boolean isDigit(char c)`: returns True if `c` is a digit (0-9)
+- `private boolean isAddOp(char c)`: returns True if `c` is `'+'` or `'-'`
+- `private boolean isMulOp(char c)`: returns True if `c` is `'*'` or `'/'`
+- `private int getNumber()`: returns integer starting with character at current position, advancing `pos` to next character after number
+- `private void error()`: handle error
 
-Represents action of an operator on one or more operands. Operation may be unary e.g. `Factorial`, `Cosine`; may be binary e.g. `Addition`, `Division`. Abstract subclasses `UnaryOperation` and `BinaryOperation` disambiguate these cases. Different mathematical operations are expressed as subclasses of these.
-
-Overrides `evaluate()` to apply the corresponding operator to its (evaluated) operand expression(s).
-
-Base `Operation` class has a `public final int` member `numOperands` allowing user to access the number of operands the described operator acts on. This will probably be removed. The immediate subclasses set this value correspondingly with their constructors, which take this ... consider making the `numOperands` a class variable rather than setting in constructor so that it can be checked before instantiation.
+Considering `java.text.StringCharacterIterator` as a way to streamline iteration through the string characters.
 
 # Operator precedence
 
-Unary operations are applied first, then the BIDMAS operator precedence rule is applied. This means that brackets are recursed upon before performing other operations, and expressions without parentheses are evaluated in the order *indices* (I), *division* (D), *multiplication* (M), *addition* (A) and *subtraction* (S).
+Unary operations are applied first, then the BIDMAS operator precedence rule is applied. This means that brackets are recursed upon before performing other operations, and expressions without parentheses are evaluated in the order *indices* (I), *division* (D)/*multiplication* (M) and *addition* (A)/*subtraction* (S), with operators of equal precedence evaluated left to right.
 
-To implement operator precedence on user-provided input, this input must be read to a sequence of `Symbol` objects, where a `Symbol` represents a single unit of input (i.e. a digit or operator) or a composition of these which is interpreted as a single unit (e.g. a bracketed expression).
-
-
-
-
-Initial minimum backend implementation: `+`, `-`, `*` and `/` operations on integers only.
