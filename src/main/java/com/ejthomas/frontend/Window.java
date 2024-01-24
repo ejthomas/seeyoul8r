@@ -49,7 +49,7 @@ public class Window extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
-        this.setSize(500, 400);
+        this.setSize(600, 400);
         this.setResizable(false);
     }
 
@@ -72,17 +72,14 @@ public class Window extends JFrame {
     private JPanel createDisplayPanel() {
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.LINE_AXIS));
-        // this.getContentPane().add(displayPanel, BorderLayout.PAGE_START);
 
         inputField = new JTextField();
-        // tf.setBounds(400, 50, 200, 50);
         inputField.setPreferredSize(new Dimension(100, 50));
         displayPanel.add(inputField);
 
 
         answerLabel = new JLabel();
         answerLabel.setPreferredSize(new Dimension(100, 50));
-        // label.setBounds(400, 150, 200, 50);
         displayPanel.add(answerLabel);
         return displayPanel;
     }
@@ -114,19 +111,19 @@ public class Window extends JFrame {
         operationPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        InputButton leftParenButton = new InputButton("(", this);
-        InputButton rightParenButton = new InputButton(")", this);
-        InputButton addButton = new InputButton("+", this);
-        InputButton subButton = new InputButton("-", this);
-        InputButton mulButton = new InputButton("*", this, "x");
-        InputButton divButton = new InputButton("/", this);
-
         JButton clearButton = new JButton("CLEAR");
         clearButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 clearAction();
             }
         });
+        InputButton powerButton = new InputButton("^", this, "a^b");
+        InputButton leftParenButton = new InputButton("(", this);
+        InputButton rightParenButton = new InputButton(")", this);
+        InputButton addButton = new InputButton("+", this);
+        InputButton subButton = new InputButton("-", this);
+        InputButton mulButton = new InputButton("*", this, "x");
+        InputButton divButton = new InputButton("/", this);
 
         // Global constraints
         gbc.fill = GridBagConstraints.BOTH;
@@ -136,12 +133,17 @@ public class Window extends JFrame {
         // Clear button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.5;
         gbc.weighty = 0.5;
         operationPanel.add(clearButton, gbc);
 
+        // Power button
+        gbc.gridx += 1;
+        operationPanel.add(powerButton, gbc);
+
         // Left parenthesis
+        gbc.gridx = 0;
         gbc.gridy += 1;
         gbc.weightx = 0.5;
         gbc.weighty = 0.5;
@@ -206,6 +208,4 @@ public class Window extends JFrame {
     public void lastAnswerAction() {
         setInput(getInput() + lastAnswer);
     }
-
-    // TODO:extension beyond single operation
 }

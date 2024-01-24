@@ -91,7 +91,7 @@ public class ParserTest {
         Assertions.assertFalse(parser.isEvaluated());
 
         // Rejects unsupported operator
-        parser = new Parser("2^5");
+        parser = new Parser("2&5");
         parser.evaluate();
         Assertions.assertFalse(parser.isEvaluated());
     }
@@ -189,5 +189,48 @@ public class ParserTest {
         parser = new Parser("1+2)*3");
         parser.evaluate();
         Assertions.assertFalse(parser.isEvaluated());
+    }
+
+    @Test
+    public void givenPower_whenEvaluate_thenAccepts() {
+        Parser parser = new Parser("10^4");
+        parser.evaluate();
+        Assertions.assertEquals(10000, parser.getResult());
+
+        parser = new Parser("2^10");
+        parser.evaluate();
+        Assertions.assertEquals(1024, parser.getResult());
+
+        parser = new Parser("-1^2");
+        parser.evaluate();
+        Assertions.assertEquals(1, parser.getResult());
+
+        parser = new Parser("10^-1");
+        parser.evaluate();
+        Assertions.assertTrue(parser.isEvaluated());
+        Assertions.assertEquals(0, parser.getResult());
+    }
+
+    @Test
+    public void givenExpressionWithPower_whenEvaluate_thenPrecedenceCorrect() {
+        Parser parser = new Parser("(1+2)^2");
+        parser.evaluate();
+        Assertions.assertEquals(9, parser.getResult());
+
+        parser = new Parser("2^(2+2)");
+        parser.evaluate();
+        Assertions.assertEquals(16, parser.getResult());
+
+        parser = new Parser("5*2^2");
+        parser.evaluate();
+        Assertions.assertEquals(20, parser.getResult());
+
+        parser = new Parser("3+4^2-1");
+        parser.evaluate();
+        Assertions.assertEquals(18, parser.getResult());
+
+        parser = new Parser("2^3^2");
+        parser.evaluate();
+        Assertions.assertEquals(512, parser.getResult());
     }
 }

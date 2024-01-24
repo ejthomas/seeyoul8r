@@ -72,14 +72,7 @@ public class Parser {
 
     private int getExpression() {
         int expression = getTerm();
-        // This check feels very wrong
-        // if (pos == input.length()) {
-        //     // result = workingResult;
-        //     // evaluated = true;
-        //     return expression;
-        // }
         if (idx < input.length()) {
-            // char c = input.charAt(idx);
             while (isAddOp(c)) {
                 if (c == '+') {
                     nextChar();
@@ -115,33 +108,38 @@ public class Parser {
 
     private int getFactor() {
         /* A factor is a valid operand of the multiply/divide 
-         * operators. This includes numbers and expressions
-         * enclosed in parentheses e.g. (expression).
+         * operators. This includes numbers, numbers raised 
+         * to powers and expressions enclosed in parentheses 
+         * e.g. (expression).
          */
+        int factor;
         if (c == '(') {
             nextChar();
-            int factor = getExpression();
+            factor = getExpression();
             if (c == ')') {
                 nextChar();
-                return factor;
             } else {
                 error(")");
                 return 0;
             }
         } else {
-            return getNumber();
+            factor = getNumber();
         }
+        if (c == '^') {
+            nextChar();
+            factor = pow(factor);
+        }
+        return factor;
     }
 
     private int getNumber() {
-        // char c = input.charAt(idx);
         // Handle sign if present
         if (c == '+') {
             // Skip with no action
             nextChar();
         } else if (c == '-') {
             nextChar();
-            return sub(0); // return 0 - <numerical part>
+            return -getNumber();
         }
         // Get numerical part
         if (isDigit(c)) {
@@ -156,19 +154,28 @@ public class Parser {
     }
 
     private int add(int num1) {
+        // TODO: check for overflow before evaluating
         return num1 + getTerm();
     }
 
     private int sub(int num1) {
+        // TODO: check for overflow before evaluating
         return num1 - getTerm();
     }
 
     private int mul(int num1) {
+        // TODO: check for overflow before evaluating
         return num1 * getFactor();
     }
 
     private int div(int num1) {
+        // TODO: check for overflow before evaluating
         return num1 / getFactor();
+    }
+
+    private int pow(int base) {
+        // TODO: check for overflow before evaluating
+        return Calculator.pow(base, getFactor());
     }
 
     private void error(String expected) {

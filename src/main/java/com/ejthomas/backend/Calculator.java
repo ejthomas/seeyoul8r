@@ -1,58 +1,44 @@
 package com.ejthomas.backend;
 
-import java.util.HashSet;
-import java.util.Collections;
-import java.util.LinkedList;
-
 public class Calculator {
-    public static void main(String[] args) {
-        // Receive input from frontend -- provided as String
-        String input = "1++2";
 
-        Parser parser = new Parser(input);
-
-        parser.evaluate();
-
-        if (parser.isEvaluated()) {
-            System.out.print(input + "=" + parser.getResult() + "\n");
-        }
+    public static int pow(int base, int exponent) {
+        return powBySquaring(base, exponent);
     }
 
-    public static LinkedList<String> toSequence(String s) {
-        LinkedList<String> sequence = new LinkedList<>();
-        HashSet<String> operators = new HashSet<String>();
-        Collections.addAll(operators, "+", "-", "*", "/", "sqrt");
-        int i = 0;
-        while (i < s.length()) {
-            if (Character.isDigit(s.charAt(i))) {
-                // Handle groups of digits
-                int start = i;
-                while (++i < s.length() && Character.isDigit(s.charAt(i))) {}
-                sequence.add(s.substring(start, i));
+    private static int powBySquaring(int base, int exponent) {
+        /*
+         * Cases:
+         * - base and exponent == 0
+         * - base != 0, exponent == 0
+         * - base > 0, exponent < 0
+         * - base == 0, exponent < 0
+         * - exponent > 0
+         */
+        if (exponent == 0) {
+            if (base == 0) {
+                throw new ArithmeticException("0/0 is undefined");
             } else {
-                // Handle operators
-                int start = i;
-                while (++i < s.length() && !Character.isDigit(s.charAt(i))) {}
-                String subs = s.substring(start, i);
-                int j = 0;
-                while (++j <= subs.length()) {
-                    if (operators.contains(subs)) {
-                        sequence.add(subs);
-                        subs = "";
-                    } else {
-                        if (operators.contains(subs.substring(0, j))) {
-                            sequence.add(subs.substring(0, j));
-                            subs = subs.substring(j); // subs.substring(j).length() == 0 if j == subs.length()
-                            j = 0;
-                        }
-                    }
-                }
-                // Check all operators parsed
-                if (subs.length() > 0) {
-                    System.out.println("Error: could not parse operator: " + subs);
-                }
+                return 1;
             }
         }
-        return sequence;
+        if (exponent < 0) {
+            // Throws ArithmeticException for base == 0
+            return powBySquaring(1 / base, -exponent);
+        }
+        // Use tail-recursive iteration
+        return powBySquaringIteration(1, base, exponent);
+    }
+
+    private static int powBySquaringIteration(int carry, int base, int exponent) {
+        if (exponent == 1) {
+            return carry * base;
+        }
+        if (exponent % 2 == 0) {
+            return powBySquaringIteration(carry, base * base, exponent / 2);
+        }
+        // exponent % 2 == 1
+        // This means exponent / 2 == (exponent - 1) / 2
+        return powBySquaringIteration(carry * base, base * base, exponent / 2);
     }
 }
