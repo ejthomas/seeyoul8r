@@ -115,10 +115,22 @@ public class Parser {
 
     private int getFactor() {
         /* A factor is a valid operand of the multiply/divide 
-         * operators. This only includes numbers for the
-         * currently included operation set.
+         * operators. This includes numbers and expressions
+         * enclosed in parentheses e.g. (expression).
          */
-        return getNumber();
+        if (c == '(') {
+            nextChar();
+            int factor = getExpression();
+            if (c == ')') {
+                nextChar();
+                return factor;
+            } else {
+                error(")");
+                return 0;
+            }
+        } else {
+            return getNumber();
+        }
     }
 
     private int getNumber() {

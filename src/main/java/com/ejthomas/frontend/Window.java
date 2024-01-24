@@ -114,6 +114,8 @@ public class Window extends JFrame {
         operationPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        InputButton leftParenButton = new InputButton("(", this);
+        InputButton rightParenButton = new InputButton(")", this);
         InputButton addButton = new InputButton("+", this);
         InputButton subButton = new InputButton("-", this);
         InputButton mulButton = new InputButton("*", this, "x");
@@ -126,35 +128,46 @@ public class Window extends JFrame {
             }
         });
 
+        // Global constraints
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Clear button
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 0.5;
-        gbc.insets = new Insets(10, 10, 10, 10);
         operationPanel.add(clearButton, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+
+        // Left parenthesis
+        gbc.gridy += 1;
         gbc.weightx = 0.5;
         gbc.weighty = 0.5;
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        operationPanel.add(addButton, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.5;
-        operationPanel.add(subButton, gbc);
+        operationPanel.add(leftParenButton, gbc);
+
+        // Right parenthesis
+        gbc.gridx += 1;
+        operationPanel.add(rightParenButton, gbc);
+
+        // Add button
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.5;
+        gbc.gridy += 1;
+        operationPanel.add(addButton, gbc);
+
+        // Subtract button
+        gbc.gridx += 1;
+        operationPanel.add(subButton, gbc);
+
+        // Multiply button
+        gbc.gridx = 0;
+        gbc.gridy += 1;
         operationPanel.add(mulButton, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.5;
+
+        // Divide button
+        gbc.gridx += 1;
         operationPanel.add(divButton, gbc);
 
         // Equals button
@@ -167,7 +180,7 @@ public class Window extends JFrame {
         });
         gbc.weightx = 0.0;
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy += 1;
         gbc.gridwidth = 2;
         operationPanel.add(equalsButton, gbc);
         return operationPanel;
