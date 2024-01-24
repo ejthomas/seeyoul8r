@@ -157,4 +157,37 @@ public class ParserTest {
         Assertions.assertTrue(parser.isEvaluated());
         Assertions.assertEquals(2, parser.getResult());
     }
+
+    @Test
+    public void givenParentheses_whenEvaluate_thenPrecedenceCorrect() {
+        Parser parser = new Parser("(1+2)*3");
+        parser.evaluate();
+        Assertions.assertEquals(9, parser.getResult());
+    }
+
+    @Test
+    public void givenRedundantParens_whenEvaluate_thenAccepts() {
+        // Whole input in redundant parentheses
+        Parser parser = new Parser("(1+2*3)");
+        parser.evaluate();
+        Assertions.assertEquals(7, parser.getResult());
+
+        // Single value in redundant parentheses
+        parser = new Parser("1+(2)*3");
+        parser.evaluate();
+        Assertions.assertEquals(7, parser.getResult());
+    }
+
+    @Test
+    public void givenUnmatchedParens_whenEvaluate_thenRejects() {
+        // Rejects unmatched left parenthesis
+        Parser parser = new Parser("1+(2*3");
+        parser.evaluate();
+        Assertions.assertFalse(parser.isEvaluated());
+
+        // Rejects unexpected right parenthesis
+        parser = new Parser("1+2)*3");
+        parser.evaluate();
+        Assertions.assertFalse(parser.isEvaluated());
+    }
 }

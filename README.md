@@ -23,7 +23,7 @@ java -jar target/seeyoul8r-<version>.jar
 ```
 The on-screen buttons should be used to input the desired calculation. The input is evaluated when the "=" button is clicked. The "CLEAR" button clears the input and output ready for the next calculation. The "ANS" button copies the last evaluated answer to the input field.
 
-Currently, the calculator observes order of operations for addition, subtraction, multiplication and division, but does not include support for brackets or exponentiation, and is limited to integer (whole-number) calculations.
+Currently, the calculator observes order of operations for parentheses, addition, subtraction, multiplication and division, but does not include support for exponentiation, and is limited to integer (whole-number) calculations.
 
 
 # Contribute
