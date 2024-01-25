@@ -50,8 +50,8 @@ public class CalculatorTest {
 
     @Test
     public void givenPositiveBaseAndNonIntExp_whenPow_thenCalculatesPower() {
-        Assertions.assertTrue(Calculator.abs(2.82842712475 - Calculator.pow(8, 0.5)) < Calculator.EPSILON_REL * 2.82842712475);
-        Assertions.assertTrue(Calculator.abs(36912.0142177 - Calculator.pow(13, 4.1)) < Calculator.EPSILON_REL * 36912.0142177);
+        Assertions.assertTrue(Calculator.abs(2.828427124746190 - Calculator.pow(8, 0.5)) < Calculator.EPSILON_REL * 2.828427124746190);
+        Assertions.assertTrue(Calculator.abs(36912.014217721338 - Calculator.pow(13, 4.1)) < Calculator.EPSILON_REL * 36912.014217721338);
     }
 
     @Test
@@ -78,9 +78,9 @@ public class CalculatorTest {
      */
     @Test
     public void givenPositiveDouble_whenExp_thenConverges() {
-        Assertions.assertTrue(Calculator.abs(2.71828182846 - Calculator.exp(1)) < Calculator.EPSILON_REL * 2.71828182846);
-        Assertions.assertTrue(Calculator.abs(485165195.40979 - Calculator.exp(20)) < Calculator.EPSILON_REL * 485165195.40979);
-        Assertions.assertTrue(Calculator.abs(5184705528587070000000.0 - Calculator.exp(50)) < Calculator.EPSILON_REL * 5184705528587070000000.0);
+        Assertions.assertTrue(Calculator.abs(2.7182818284590452 - Calculator.exp(1)) < Calculator.EPSILON_REL * 2.7182818284590452);
+        Assertions.assertTrue(Calculator.abs(485165195.40979028 - Calculator.exp(20)) < Calculator.EPSILON_REL * 485165195.40979028);
+        Assertions.assertTrue(Calculator.abs(5184705528587072464087.0 - Calculator.exp(50)) < Calculator.EPSILON_REL * 5184705528587072464087.0);
     }
 
     @Test
@@ -90,9 +90,9 @@ public class CalculatorTest {
 
     @Test
     public void givenNegativeDouble_whenExp_thenConverges() {
-        Assertions.assertTrue(Calculator.abs(0.367879441171 - Calculator.exp(-1)) < Calculator.EPSILON_REL * 0.367879441171);
-        Assertions.assertTrue(Calculator.abs(2.06115362244e-9 - Calculator.exp(-20)) < Calculator.EPSILON_REL * 2.06115362244e-9);
-        Assertions.assertTrue(Calculator.abs(1.92874984796e-22 - Calculator.exp(-50)) < Calculator.EPSILON_REL * 1.92874984796e-22);
+        Assertions.assertTrue(Calculator.abs(0.36787944117144232 - Calculator.exp(-1)) < Calculator.EPSILON_REL * 0.36787944117144232);
+        Assertions.assertTrue(Calculator.abs(2.06115362243855783e-9 - Calculator.exp(-20)) < Calculator.EPSILON_REL * 2.06115362243855783e-9);
+        Assertions.assertTrue(Calculator.abs(1.92874984796391778e-22 - Calculator.exp(-50)) < Calculator.EPSILON_REL * 1.92874984796391778e-22);
     }
 
     /*
@@ -127,8 +127,8 @@ public class CalculatorTest {
 
     @Test
     public void givenPositive_whenLn_thenConverges() {
-        Assertions.assertTrue(Calculator.abs(0.69314718056 - Calculator.ln(2)) < Calculator.EPSILON_REL * 0.69314718056);
-        Assertions.assertTrue(Calculator.abs(6.23832462504 - Calculator.ln(512)) < Calculator.EPSILON_REL * 6.23832462504);
-        Assertions.assertTrue(Calculator.abs(472.029944064 - Calculator.ln(1e205)) < Calculator.EPSILON_REL * 472.029944064);
+        Assertions.assertTrue(Calculator.abs(0.69314718055994531 - Calculator.ln(2)) < Calculator.EPSILON_REL * 0.69314718055994531);
+        Assertions.assertTrue(Calculator.abs(6.2383246250395078 - Calculator.ln(512)) < Calculator.EPSILON_REL * 6.2383246250395078);
+        Assertions.assertTrue(Calculator.abs(472.02994406377937 - Calculator.ln(1e205)) < Calculator.EPSILON_REL * 472.02994406377937);
     }
 }

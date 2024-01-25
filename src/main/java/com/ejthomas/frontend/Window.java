@@ -1,7 +1,6 @@
 package com.ejthomas.frontend;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import com.ejthomas.backend.Parser;
 

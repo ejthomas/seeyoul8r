@@ -2,7 +2,7 @@ package com.ejthomas.backend;
 
 public class Calculator {
 
-    public final static double EPSILON_REL = 1e-10;
+    public final static double EPSILON_REL = 1e-15;
     public final static int MAX_ITERATIONS = 1_000_000;
 
     /*
