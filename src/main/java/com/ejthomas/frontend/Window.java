@@ -16,6 +16,10 @@ public class Window extends JFrame {
     protected JTextField inputField;
     protected JLabel answerLabel;
     private String lastAnswer = "";
+    private final JPanel displayPanel;
+    private final JPanel numberPanel;
+    private final JPanel operationPanel;
+    private final JPanel lowerPanel;
 
     public static void main(String[] args) {
         Window window = new Window("SeeYouL8r Calculator");
@@ -27,23 +31,23 @@ public class Window extends JFrame {
         super(name);
 
         // Display panel
-        JPanel displayPanel = createDisplayPanel();
+        displayPanel = createDisplayPanel();
         this.getContentPane().add(displayPanel, BorderLayout.PAGE_START);
 
         // Lower panel
-        JPanel lowerPanel = new JPanel();
+        lowerPanel = new JPanel();
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.LINE_AXIS));
         this.getContentPane().add(lowerPanel, BorderLayout.CENTER);
 
         // Number panel
-        JPanel numberPanel = createNumberPanel();
+        numberPanel = createNumberPanel();
         lowerPanel.add(numberPanel);
 
         // Separator
         lowerPanel.add(Box.createHorizontalStrut(30));
 
         // Operation panel
-        JPanel operationPanel = createOperationPanel();
+        operationPanel = createOperationPanel();
         lowerPanel.add(operationPanel);
 
 
@@ -72,15 +76,19 @@ public class Window extends JFrame {
     private JPanel createDisplayPanel() {
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.LINE_AXIS));
+        displayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         inputField = new JTextField();
-        inputField.setPreferredSize(new Dimension(100, 50));
+        inputField.setPreferredSize(new Dimension(0, 50));
         displayPanel.add(inputField);
 
+        // displayPanel.add(Box.createHorizontalStrut(20));
 
         answerLabel = new JLabel();
-        answerLabel.setPreferredSize(new Dimension(100, 50));
+        // answerLabel.setPreferredSize(new Dimension(100, 50));
+        // answerLabel.setMinimumSize(new Dimension(200, 50));
         displayPanel.add(answerLabel);
+        // displayPanel.add(Box.createHorizontalStrut(20), 1);
         return displayPanel;
     }
 
@@ -94,6 +102,9 @@ public class Window extends JFrame {
         }
         // zero goes last to match typical numpad
         numberPanel.add(new InputButton("0", this));
+
+        // Decimal point button
+        numberPanel.add(new InputButton(".", this));
 
         // Previous answer button
         JButton lastAnswerButton = new JButton("ANS");
@@ -191,18 +202,31 @@ public class Window extends JFrame {
     public void clearAction() {
         setInput("");
         setAnswer("");
+        // Remove extra space between input and answer fields
+        displayPanel.remove(1);
     }
 
     public void equalsAction() {
         Parser parser = new Parser(getInput());
         parser.evaluate();
         if (parser.isEvaluated()) {
-            String answer = String.valueOf(parser.getResult());
-            setAnswer(answer);
-            lastAnswer = answer;
+            double result = parser.getResult();
+            if (result == (int)result) {
+                String answer = String.valueOf((int)result);
+                setAnswer(answer);
+                lastAnswer = answer;
+            } else {
+                String answer = String.valueOf(result);
+                setAnswer(answer);
+                lastAnswer = answer;
+            }
+        } else if (parser.isInErrorState()) {
+            setAnswer(parser.getLastError());
         } else {
-            setAnswer("Syntax Error");
+            setAnswer("Unknown Error");
         }
+        // Increase space between input and answer fields
+        displayPanel.add(Box.createHorizontalStrut(20), 1); 
     }
 
     public void lastAnswerAction() {

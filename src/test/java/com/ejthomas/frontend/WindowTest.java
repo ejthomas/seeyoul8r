@@ -34,17 +34,26 @@ public class WindowTest {
     }
 
     @Test
-    public void equalsAction() {
+    public void givenEmptyInput_whenEqualsAction_thenAnswerIsError() {
         Window window = new Window("Window");
-
-        // Syntax error if empty
         window.equalsAction();
-        Assertions.assertEquals("Syntax Error", window.getAnswer());
+        Assertions.assertEquals("Expected non-empty", window.getAnswer());
+    }
 
-        // Sets answer correctly when input field valid
+    @Test
+    public void givenValidInput_whenEqualsAction_thenIntegerAnswerIsCorrect() {
+        Window window = new Window("Window");
         window.setInput("15*2");
         window.equalsAction();
         Assertions.assertEquals("30", window.getAnswer());
+    }
+
+    @Test
+    public void givenValidInput_whenEqualsAction_thenDoubleAnswerIsCorrect() {
+        Window window = new Window("Window");
+        window.setInput("1.8*3");
+        window.equalsAction();
+        Assertions.assertEquals("5.4", window.getAnswer());
     }
 
     @Test
