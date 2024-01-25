@@ -26,17 +26,13 @@ public class Calculator {
          * - base == 0, exponent < 0
          * - exponent > 0
          */
-        if (exponent == 0) {
-            if (base == 0) {
-                throw new ArithmeticException("0/0 is undefined");
-            } else {
-                return 1;
-            }
+        if (base == 0 && exponent <= 0) {
+            throw new ArithmeticException(String.format("%f^%d is undefined", base, exponent));
         }
-        if (exponent < 0) {
-            if (base == 0) {
-                throw new ArithmeticException("1/0 is undefined");
-            }
+        if (base != 0 && exponent == 0) {
+            return 1;
+        }
+        if (base != 0 && exponent < 0) {
             return powBySquaring(1 / base, -exponent);
         }
         // Use tail-recursive iteration

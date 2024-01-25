@@ -37,9 +37,9 @@ public class WindowTest {
     public void equalsAction() {
         Window window = new Window("Window");
 
-        // Syntax error if empty
+        // Error message if empty
         window.equalsAction();
-        Assertions.assertEquals("Syntax Error", window.getAnswer());
+        Assertions.assertEquals("Expected non-empty", window.getAnswer());
 
         // Sets answer correctly when input field valid
         window.setInput("15*2");

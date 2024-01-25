@@ -195,7 +195,12 @@ public class Parser {
 
     private double div(double num1) {
         // TODO: check for overflow before evaluating
-        return num1 / getFactor();
+        double num2 = getFactor();
+        if (num2 == 0.0) {
+            error("Division by 0");
+            return 0;
+        }
+        return num1 / num2;
     }
 
     private double pow(double base) {
