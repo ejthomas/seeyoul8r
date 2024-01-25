@@ -64,11 +64,11 @@ public class ParserTest {
         Assertions.assertTrue(parser.isEvaluated());
         Assertions.assertEquals(17, parser.getResult());
 
-        // Rounding towards zero divide
+        // Floating-point divide
         parser = new Parser("49/2");
         parser.evaluate();
         Assertions.assertTrue(parser.isEvaluated());
-        Assertions.assertEquals(24, parser.getResult());
+        Assertions.assertEquals(24.5, parser.getResult());
 
         // Rejects letter at start
         parser = new Parser("A2/2");
@@ -208,7 +208,7 @@ public class ParserTest {
         parser = new Parser("10^-1");
         parser.evaluate();
         Assertions.assertTrue(parser.isEvaluated());
-        Assertions.assertEquals(0, parser.getResult());
+        Assertions.assertEquals(0.1, parser.getResult());
     }
 
     @Test
@@ -232,5 +232,33 @@ public class ParserTest {
         parser = new Parser("2^3^2");
         parser.evaluate();
         Assertions.assertEquals(512, parser.getResult());
+    }
+
+    @Test
+    public void givenInvalidPower_whenEvaluate_thenRejects() {
+        Parser parser = new Parser("0^-2");
+        parser.evaluate();
+        Assertions.assertFalse(parser.isEvaluated());
+        Assertions.assertTrue(parser.isInErrorState());
+
+        parser = new Parser("0^0");
+        parser.evaluate();
+        Assertions.assertFalse(parser.isEvaluated());
+        Assertions.assertTrue(parser.isInErrorState());
+    }
+
+    @Test
+    public void givenDecimal_whenEvaluate_thenReturnsDouble() {
+        Parser parser = new Parser("4.9");
+        parser.evaluate();
+        Assertions.assertEquals(4.9, parser.getResult());
+
+        parser = new Parser("2.5*3");
+        parser.evaluate();
+        Assertions.assertEquals(7.5, parser.getResult());
+
+        parser = new Parser("3.1*1.4");
+        parser.evaluate();
+        Assertions.assertEquals(4.34, parser.getResult());
     }
 }

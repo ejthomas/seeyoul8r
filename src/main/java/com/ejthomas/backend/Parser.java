@@ -6,10 +6,10 @@ public class Parser {
     private boolean evaluated = false;
     private int idx = 0;  // current index in input
     private char c;  // current character in input
-    private int result;
+    private double result;
     private boolean errorRaised = false;
     private String lastError;
-    private final String validCharacters = "[0-9+-*/]";
+    private final String validCharacters = "[0-9+-*/^.()]";
 
     public Parser(String s) {
         input = s;
@@ -20,12 +20,16 @@ public class Parser {
         return evaluated;
     }
 
-    public int getResult() {
+    public double getResult() {
         return result;
     }
 
     public String getLastError() {
         return lastError;
+    }
+
+    public boolean isInErrorState() {
+        return errorRaised;
     }
 
     public void evaluate() {
@@ -37,16 +41,16 @@ public class Parser {
         errorRaised = false;  // overwrite any previous value
         idx = 0;
         if (idx == input.length()) {
-            error("non-empty");
+            error("Expected non-empty");
             return;  // exit with error if input is empty
         }
-        int workingResult = getExpression();
+        double workingResult = getExpression();
         // Check that end is reached rejects trailing characters
         if (idx == input.length() && !errorRaised) {
             evaluated = true;
             result = workingResult;
         } else {
-            error(validCharacters);
+            error("Expected " + validCharacters);
         }
     }
 
@@ -70,8 +74,8 @@ public class Parser {
         return c == '*' || c == '/';
     }
 
-    private int getExpression() {
-        int expression = getTerm();
+    private double getExpression() {
+        double expression = getTerm();
         if (idx < input.length()) {
             while (isAddOp(c)) {
                 if (c == '+') {
@@ -86,12 +90,12 @@ public class Parser {
         return expression;
     }
 
-    private int getTerm() {
+    private double getTerm() {
         /* A term is an expression which can be an operand of the
          * add/subtract operators. This includes numbers and
          * binary expressions containing MulOps and factors.
          */
-        int term = getFactor();
+        double term = getFactor();
         if (idx < input.length()) {
             while (isMulOp(c)) {
                 if (c == '*') {
@@ -106,20 +110,20 @@ public class Parser {
         return term;
     }
 
-    private int getFactor() {
+    private double getFactor() {
         /* A factor is a valid operand of the multiply/divide 
          * operators. This includes numbers, numbers raised 
          * to powers and expressions enclosed in parentheses 
          * e.g. (expression).
          */
-        int factor;
+        double factor;
         if (c == '(') {
             nextChar();
             factor = getExpression();
             if (c == ')') {
                 nextChar();
             } else {
-                error(")");
+                error("Expected )");
                 return 0;
             }
         } else {
@@ -132,7 +136,7 @@ public class Parser {
         return factor;
     }
 
-    private int getNumber() {
+    private double getNumber() {
         // Handle sign if present
         if (c == '+') {
             // Skip with no action
@@ -145,42 +149,68 @@ public class Parser {
         if (isDigit(c)) {
             int initIdx = idx;
             nextChar();
-            while (isDigit(c)) { nextChar(); }
-            return Integer.parseInt(input.substring(initIdx, idx));
+            while (isDigit(c) || c == '.') { nextChar(); }
+            return stringToDouble(input.substring(initIdx, idx));
         } else {
-            error("[0-9]");
+            error("Expected [0-9]");
             return 0;
         }
     }
 
-    private int add(int num1) {
+    private double stringToDouble(String s) {
+        double intPart = 0.0;
+        double decimalPart = 0.0;
+        int currentPos = 0;
+        while (currentPos < s.length() && s.charAt(currentPos) != '.') {
+            intPart = 10.0 * intPart + (s.charAt(currentPos) - '0');
+            currentPos++;
+        }
+        if (currentPos == s.length()) { 
+            return intPart; 
+        } else {
+            // Only reachable if decimal point present
+            currentPos = s.length() - 1;
+            while (s.charAt(currentPos) != '.') {
+                decimalPart = 0.1 * (decimalPart + (s.charAt(currentPos) - '0'));
+                currentPos--;
+            }
+            return intPart + decimalPart;
+        }
+    }
+
+    private double add(double num1) {
         // TODO: check for overflow before evaluating
         return num1 + getTerm();
     }
 
-    private int sub(int num1) {
+    private double sub(double num1) {
         // TODO: check for overflow before evaluating
         return num1 - getTerm();
     }
 
-    private int mul(int num1) {
+    private double mul(double num1) {
         // TODO: check for overflow before evaluating
         return num1 * getFactor();
     }
 
-    private int div(int num1) {
+    private double div(double num1) {
         // TODO: check for overflow before evaluating
         return num1 / getFactor();
     }
 
-    private int pow(int base) {
+    private double pow(double base) {
         // TODO: check for overflow before evaluating
-        return Calculator.pow(base, getFactor());
+        try {
+            return Calculator.pow(base, getFactor());
+        } catch (ArithmeticException e) {
+            error(e.getMessage());
+            return 0;
+        }
     }
 
-    private void error(String expected) {
+    private void error(String message) {
         if (!errorRaised) {
-            lastError = "Expected " + expected;
+            lastError = message;
             System.out.println("Error: " + lastError);
         }
         errorRaised = true;

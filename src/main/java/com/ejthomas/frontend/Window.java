@@ -95,6 +95,9 @@ public class Window extends JFrame {
         // zero goes last to match typical numpad
         numberPanel.add(new InputButton("0", this));
 
+        // Decimal point button
+        numberPanel.add(new InputButton(".", this));
+
         // Previous answer button
         JButton lastAnswerButton = new JButton("ANS");
         lastAnswerButton.addActionListener(new ActionListener(){
@@ -197,9 +200,16 @@ public class Window extends JFrame {
         Parser parser = new Parser(getInput());
         parser.evaluate();
         if (parser.isEvaluated()) {
-            String answer = String.valueOf(parser.getResult());
-            setAnswer(answer);
-            lastAnswer = answer;
+            double result = parser.getResult();
+            if (result == (int)result) {
+                String answer = String.valueOf((int)result);
+                setAnswer(answer);
+                lastAnswer = answer;
+            } else {
+                String answer = String.valueOf(result);
+                setAnswer(answer);
+                lastAnswer = answer;
+            }
         } else {
             setAnswer("Syntax Error");
         }
